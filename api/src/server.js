@@ -1,17 +1,8 @@
-const util = require('util');
+const express = require('express');
 
-const MongoClient = require('mongodb').MongoClient;
-const assert = require('assert');
+const app = express();
 
-// Connection URL
-const url = process.env.DB_URI || 'mongodb://mongodb/haoc';
+app.set('port', process.env.PORT || 3000);
+app.set('host', process.env.HOST || '0.0.0.0');
 
-// Use connect method to connect to the Server
-MongoClient.connect(url, (err, db) => {
-  assert.equal(null, err);
-  console.log('Connected correctly to server');
-
-  db.close();
-});
-
-console.log(util.inspect(process.env));
+app.get('/', (req, res) => res.send('Hello World!'));

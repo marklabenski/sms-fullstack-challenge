@@ -4,17 +4,18 @@
   "description": "This is a RESTful API delivering data for the fullstack challenge api backend and frontend.",
   "main": "src/server.js",
   "scripts": {
-    "test": "yarn run test"
+    "test": "ava"
   },
   "author": "Mark Labenski <mark.labenski@gmail.com>",
   "license": "UNLICENSED",
   "devDependencies": {
+    "ava": "^0.19.1",
     "eslint": "^3.19.0",
     "eslint-config-airbnb-base": "^11.2.0",
     "eslint-plugin-import": "^2.2.0"
   },
   "dependencies": {
     "express": "^4.15.3",
-    "mongodb": "^2.2.29"
+    "mongoose": "^4.10.7"
   }
 }
