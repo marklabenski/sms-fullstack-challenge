@@ -9,6 +9,6 @@ const list = (req, res) => {
   .catch(err => res.status(400).send(err));
 };
 
-router.get('/list', list);
+router.get('/', list);
 
 module.exports = router;
