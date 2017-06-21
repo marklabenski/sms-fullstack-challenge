@@ -4,7 +4,7 @@ const cityContractService = require('../services/cityContractService');
 const router = express.Router();
 
 const list = (req, res) => {
-  cityContractService.list()
+  cityContractService.list(req.params.page)
   .then(cityContracts => res.status(200).json(cityContracts))
   .catch(err => res.status(400).send(err));
 };
@@ -27,7 +27,7 @@ const deleteCityCon = (req, res) => {
   .catch(err => res.status(400).send(err));
 };
 
-router.get('/', list);
+router.get('/:page', list);
 router.post('/', createCityCon);
 router.put('/:id', updateCityCon);
 router.delete('/:id', deleteCityCon);

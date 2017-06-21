@@ -11,9 +11,9 @@ const getLastCityConId = () =>
     });
   });
 
-const list = () =>
+const list = page =>
   new Promise((resolve, reject) => {
-    CityContracts.find({}, (err, cityCons) => {
+    CityContracts.paginate({}, { page, limit: 10 }, (err, cityCons) => {
       if (err) reject(`${err.name} : ${err.message}`);
       if (cityCons) resolve(cityCons);
       else resolve('no citycons found');
