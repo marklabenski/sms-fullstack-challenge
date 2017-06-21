@@ -12,5 +12,4 @@ dbSetup
 .then((connection) => {
   console.log(connection);
 })
-.catch((err) => {
-  console.error(err); });
+.catch(err => console.error(err));
