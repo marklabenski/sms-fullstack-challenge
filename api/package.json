@@ -1,0 +1,21 @@
+{
+  "name": "fullstack-challenge-restful-api",
+  "version": "0.1.0",
+  "description": "This is a RESTful API delivering data for the fullstack challenge api backend and frontend.",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "author": "Mark Labenski <mark.labenski@gmail.com>",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "ava": "^0.19.1",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb-base": "^11.2.0",
+    "eslint-plugin-import": "^2.2.0"
+  },
+  "dependencies": {
+    "express": "^4.15.3",
+    "mongoose": "^4.10.7"
+  }
+}
