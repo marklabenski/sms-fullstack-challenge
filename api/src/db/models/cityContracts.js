@@ -11,11 +11,19 @@ const cityContractSchema = new Schema({
   city: { type: String, required: true },
   start_date: { type: Date },
   end_date: { type: Date },
-  price: { type: Number, required: true },
+  price: { type: String, required: true },
   status: { type: String },
   color: { type: String, match: /#[0-9a-fA-F]{6}/ },
 });
 
-cityContractSchema.path('price').set(value => value.toFixed(2));
+cityContractSchema.path('price').set((value) => {
+  let returnNumber = 0;
+  if (typeof value === 'number') {
+    returnNumber = value.toFixed(2);
+  } else {
+    returnNumber = parseInt(value, 10).toFixed(2);
+  }
+  return returnNumber.toString();
+});
 
 module.exports = mongoose.model('CityContract', cityContractSchema);
