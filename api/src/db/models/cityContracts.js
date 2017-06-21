@@ -7,7 +7,7 @@ const Schema = mongoose.Schema;
 // "color":"#fd4e19"},
 
 const cityContractSchema = new Schema({
-  id: { type: Number },
+  id: { type: Number, unique: true, dropDubs: true },
   city: { type: String, required: true },
   start_date: { type: Date },
   end_date: { type: Date },
