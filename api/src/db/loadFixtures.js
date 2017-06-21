@@ -3,6 +3,10 @@ const fs = require('fs');
 const { promisify } = require('util');
 
 const readFs = promisify(fs.readFile);
+
+// TODO: save state of loaded fixtures in mongodb to
+// not load them twice
+
 module.exports = new Promise((resolve) => {
   if (!process.env.LOAD_FIXTURES ||
     !process.env.LOAD_FIXTURES === 'true') {
@@ -18,10 +22,5 @@ module.exports = new Promise((resolve) => {
     });
 
     resolve();
-    // CityContract.find((err, data) => {
-    //   return data.forEach((citycon, index) => {
-    //     console.log('loaded fixture nr ', index);
-    //   });
-    // });
   });
 });
