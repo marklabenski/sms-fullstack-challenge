@@ -3,9 +3,7 @@ const loadFixtures = require('./loadFixtures.js');
 
 module.exports = new Promise((resolve, reject) => {
   dbConnection
-  .then(() => {
-    return loadFixtures;
-  })
+  .then(() => loadFixtures)
   .then(resolve)
   .catch(err => reject(err));
 });
