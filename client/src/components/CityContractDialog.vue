@@ -59,20 +59,49 @@ export default {
       this.closeDialog();
     },
     closeDialog() {
-      this.dialogRef.close('test');
+      this.$refs.startDatePicker.date = null;
+      this.$refs.startDatePicker.$forceUpdate();
+      this.$refs.endDatePicker.date = null;
+      this.$refs.endDatePicker.$forceUpdate();
+      this.dialogRef.close();
     },
   },
-  created() {
-    if (!this.cityContractModel) {
-      this.cityContractModel = {
-        city: '',
-        price: '',
-        start_date: new Date(),
-        end_date: new Date(),
-        status: '',
-        color: '',
-      };
+  updated() {
+    if (!this.cityContract.start_date) {
+      this.cityContract.start_date = new Date();
+      this.$refs.startDatePicker.date = new Date();
+      this.$refs.startDatePicker.$forceUpdate();
     }
+    if (!this.cityContract.end_date) {
+      this.cityContract.end_date = new Date();
+      this.$refs.endDatePicker.date = new Date();
+      this.$refs.endDatePicker.$forceUpdate();
+    }
+  },
+  computed: {
+    isNewCityContract() {
+      return !this.cityContract.id;
+    },
+    defaultStartDate() {
+      if (!this.cityContract.start_date) {
+        return null;
+      }
+      if (this.$refs.startDatePicker) {
+        this.$refs.startDatePicker.date = new Date(this.cityContract.start_date);
+        this.$refs.startDatePicker.$forceUpdate();
+      }
+      return new Date(this.cityContract.start_date);
+    },
+    defaultEndDate() {
+      if (!this.cityContract.end_date) {
+        return null;
+      }
+      if (this.$refs.endDatePicker) {
+        this.$refs.endDatePicker.date = new Date(this.cityContract.end_date);
+        this.$refs.endDatePicker.$forceUpdate();
+      }
+      return new Date(this.cityContract.end_date);
+    },
   },
 };
 </script>
