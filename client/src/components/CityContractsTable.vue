@@ -58,15 +58,15 @@
         v-bind:class="{ 'md-primary': (key === pagination.currentPage) }"
         :disabled="key === '...'">{{ key }}</md-button>
     </md-bottom-bar>
-    <md-button class="md-fab md-fab-bottom-right" id="fab" @click.native="openDialog('dialog2')">
     <md-button class="md-fab md-fab-bottom-right" id="fab" @click.native="openCreateDialog('cityContractDialog')" v-if="contentsEditable">
       <md-icon>add</md-icon>
     </md-button>
-    <ul v-if="errors && errors.length">
-      <li v-for="error of errors">
-        {{error.message}}
-      </li>
-    </ul>
+
+    <md-snackbar class="md-warn" md-position="top center" ref="snackbar" :md-duration="2000">
+      <div v-if="errors && errors.length">
+        <span class="md-warn" v-for="error in errors">{{error.message}}</span>
+      </div>
+    </md-snackbar>
   </div>
 </template>
 
