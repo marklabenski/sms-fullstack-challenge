@@ -30,10 +30,10 @@
           <md-table-cell>{{ cityContract.status }}</md-table-cell>
           <md-table-cell>{{ cityContract.color }}</md-table-cell>
           <md-table-cell v-if="contentsEditable">
-            <md-button class="md-icon-button md-raised md-primary" >
+            <md-button class="md-icon-button md-raised md-primary" v-on:click="editCityContract(cityContract)">
               <md-icon>edit</md-icon>
             </md-button>
-            <md-button class="md-icon-button md-raised md-warn">
+            <md-button class="md-icon-button md-raised md-warn" v-on:click="deleteCityContract(cityContract.id)">
               <md-icon>remove</md-icon>
             </md-button>
           </md-table-cell>
@@ -103,6 +103,30 @@ export default {
     },
     openDialog(ref) {
       this.$refs[ref].open();
+    },
+    deleteCityContract(id) {
+      apiService.delete(id)
+      .then(() => {
+        this.openPage(this.pagination.currentPage);
+      })
+      .catch((err) => {
+        this.errors.push(err);
+        this.$refs.snackbar.open();
+      });
+    },
+    editCityContract(cityContract) {
+      const updateCityContract = {
+        id: cityContract.id,
+        price: cityContract.price,
+        status: cityContract.status,
+        start_date: new Date(cityContract.start_date),
+        end_date: new Date(cityContract.end_date),
+        city: cityContract.city,
+        color: cityContract.color,
+      };
+      this.dialogCityContract = updateCityContract;
+
+      this.openDialog('cityContractDialog');
     },
     openPage(page) {
       axios.get(`http://192.168.99.100:3000/city_contracts/${page}`)
