@@ -1,5 +1,41 @@
 <template>
   <div>
+
+      <form>
+      <md-layout md-gutter>
+        <md-layout md-flex-xsmall="100" md-flex-small="50" md-flex-medium="10">
+
+          Filter settings
+        </md-layout>
+        <md-layout md-flex-xsmall="100" md-flex-small="50" md-flex-medium="30">
+          <form>
+          <label>Start Date</label>
+          <mdl-datepicker
+            v-on:update-selected="dateSelected('start_date')"
+            ref="startDatePicker"
+            v-model="filter.start_date"
+          ></mdl-datepicker>
+        </form>
+        </md-layout>
+
+        <md-layout md-flex-xsmall="100" md-flex-small="50" md-flex-medium="30">
+          <form>
+          <label>End Date</label>
+          <mdl-datepicker
+            v-on:update-selected="dateSelected('end_date')"
+            ref="startDatePicker"
+            v-model="filter.end_date"
+          ></mdl-datepicker>
+        </form>
+        </md-layout>
+
+        <md-layout md-flex-xsmall="100" md-flex-small="50" md-flex-medium="30">
+          <md-button class="md-transparent md-raised" v-on:click="applyFilter">Filter</md-button>
+        </md-layout>
+
+      </md-layout>
+      </form>
+
     <md-table md-sort="calories">
       <md-table-header>
         <md-table-row>
@@ -71,8 +107,14 @@
 </template>
 
 <script>
+import 'vue-mdl-datepicker/dist/vue-mdl-datepicker.css';
+import MdlDatepicker from 'vue-mdl-datepicker';
+
 import apiService from '@/services/apiService';
 import CityContractDialog from '@/components/CityContractDialog';
+
+const today = date =>
+  new Date(date.getTime() + Math.abs(date.getTimezoneOffset() * 60000));
 
 export default {
   props: ['contentsEditable'],
@@ -82,6 +124,14 @@ export default {
       cityContracts: [],
       pagination: {
         currentPage: 1,
+      },
+      filter: {
+        start_date: today(new Date()),
+        end_date: today(new Date()),
+      },
+      datesSelected: {
+        start_date: false,
+        end_date: false,
       },
       errors: [],
     };
@@ -94,6 +144,7 @@ export default {
     },
   },
   components: {
+    MdlDatepicker,
     CityContractDialog,
   },
   methods: {
@@ -139,6 +190,9 @@ export default {
         this.$refs.snackbar.open();
       });
     },
+    dateSelected(datePicker) {
+      this.datesSelected[datePicker] = true;
+    },
     editCityContract(cityContract) {
       const updateCityContract = {
         id: cityContract.id,
@@ -152,6 +206,28 @@ export default {
       this.dialogCityContract = updateCityContract;
 
       this.openDialog('cityContractDialog');
+    },
+    applyFilter() {
+      const filterParams = {};
+      if (this.datesSelected.start_date) {
+        filterParams.start_date = today(this.filter.start_date).toISOString();
+      }
+      if (this.datesSelected.end_date) {
+        filterParams.end_date = today(this.filter.end_date).toISOString();
+      }
+      apiService.getFilteredPage(1, filterParams)
+      .then(({ cityContracts, response }) => {
+        this.cityContracts = cityContracts;
+        this.pagination = {
+          currentPage: 1,
+          pages: response.data.pages,
+          total: response.data.total,
+        };
+      })
+      .catch((err) => {
+        this.errors.push(err);
+        this.$refs.snackbar.open();
+      });
     },
     openPage(page) {
       apiService.getPage(page)

@@ -22,6 +22,20 @@ const prepareCityContractData = (cityContract) => {
   return preparedCityContract;
 };
 
+const getFilteredPage = (pageNum, filters) =>
+  new Promise((resolve, reject) =>
+    axios.get(`${apiUrl}/city_contracts/${pageNum}`, {
+      params: {
+        ...filters,
+      },
+    })
+    .then((response) => {
+      resolve({ cityContracts: response.data.docs, response });
+    })
+    .catch((err) => {
+      reject(err);
+    }));
+
 const getPage = pageNum =>
   new Promise((resolve, reject) =>
     axios.get(`${apiUrl}/city_contracts/${pageNum}`)
@@ -71,5 +85,6 @@ export default {
   getPage,
   create,
   update,
+  getFilteredPage,
   delete: deleteContract,
 };
