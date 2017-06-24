@@ -165,6 +165,7 @@ export default {
       })
       .catch((err) => {
         this.errors.push(err);
+        this.$refs.snackbar.open();
       });
     },
   },
