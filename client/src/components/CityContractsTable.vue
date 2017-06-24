@@ -53,6 +53,7 @@
       <md-button
         v-for="key of pageButtons"
         v-on:click="openPage(key)"
+        :key="key"
         class="md-raised"
         v-bind:class="{ 'md-primary': (key === pagination.currentPage) }"
         :disabled="key === '...'">{{ key }}</md-button>
