@@ -7,7 +7,7 @@
 
       <h2 class="md-title" style="flex: 1">Frontend</h2>
     </md-toolbar>
-    <city-contracts-table contentsEditable="false">
+    <city-contracts-table :contentsEditable="false">
     </city-contracts-table>
   </div>
 </template>
