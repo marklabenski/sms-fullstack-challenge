@@ -20,7 +20,6 @@
         <md-spinner :md-size="150" md-indeterminate v-if="!cityContracts.length && !errors.length"></md-spinner>
       </md-layout>
       <md-table-body v-if="cityContracts && cityContracts.length">
-
         <md-table-row v-for="(cityContract, index) of cityContracts" :key="cityContract.id" >
           <md-table-cell>{{ cityContract.id }}</md-table-cell>
           <md-table-cell>{{ cityContract.city }}</md-table-cell>
