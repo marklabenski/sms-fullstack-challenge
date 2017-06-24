@@ -20,7 +20,6 @@
         <md-spinner :md-size="150" md-indeterminate v-if="!cityContracts.length && !errors.length"></md-spinner>
       </md-layout>
       <md-table-body v-if="cityContracts && cityContracts.length">
-
         <md-table-row v-for="(cityContract, index) of cityContracts" :key="cityContract.id" >
           <md-table-cell>{{ cityContract.id }}</md-table-cell>
           <md-table-cell>{{ cityContract.city }}</md-table-cell>
@@ -30,43 +29,49 @@
           <md-table-cell>{{ cityContract.status }}</md-table-cell>
           <md-table-cell>{{ cityContract.color }}</md-table-cell>
           <md-table-cell v-if="contentsEditable">
-            <md-button class="md-icon-button md-raised md-primary" >
+            <md-button class="md-icon-button md-raised md-primary" v-on:click="editCityContract(cityContract)">
               <md-icon>edit</md-icon>
             </md-button>
-            <md-button class="md-icon-button md-raised md-warn">
+            <md-button class="md-icon-button md-raised md-warn" v-on:click="deleteCityContract(cityContract.id)">
               <md-icon>remove</md-icon>
             </md-button>
           </md-table-cell>
         </md-table-row>
 
       </md-table-body>
-      <md-dialog md-open-from="#fab" md-close-to="#fab" ref="dialog2">
-        <city-contract-dialog :dialogRef="this.$refs['dialog2']" :cityContract.sync="dialogCityContract"></city-contract-dialog>
+      <md-dialog md-open-from="#fab" md-close-to="#fab" ref="cityContractDialog" v-if="contentsEditable">
+        <city-contract-dialog
+          v-on:update="onModelUpdate"
+          v-on:create="onModelCreate"
+          :cityContract="dialogCityContract"
+          :dialogRef="this.$refs['cityContractDialog']">
+        </city-contract-dialog>
       </md-dialog>
-
     </md-table>
 
     <md-bottom-bar v-if="pagination && pagination.pages">
       <md-button
         v-for="key of pageButtons"
         v-on:click="openPage(key)"
+        :key="key"
         class="md-raised"
         v-bind:class="{ 'md-primary': (key === pagination.currentPage) }"
         :disabled="key === '...'">{{ key }}</md-button>
     </md-bottom-bar>
-    <md-button class="md-fab md-fab-bottom-right" id="fab" @click.native="openDialog('dialog2')">
+    <md-button class="md-fab md-fab-bottom-right" id="fab" @click.native="openCreateDialog('cityContractDialog')" v-if="contentsEditable">
       <md-icon>add</md-icon>
     </md-button>
-    <ul v-if="errors && errors.length">
-      <li v-for="error of errors">
-        {{error.message}}
-      </li>
-    </ul>
+
+    <md-snackbar class="md-warn" md-position="top center" ref="snackbar" :md-duration="2000">
+      <div v-if="errors && errors.length">
+        <span class="md-warn" v-for="error in errors">{{error.message}}</span>
+      </div>
+    </md-snackbar>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import apiService from '@/services/apiService';
 import CityContractDialog from '@/components/CityContractDialog';
 
 export default {
@@ -92,22 +97,66 @@ export default {
     CityContractDialog,
   },
   methods: {
-    onOpen() {
-      // console.log('Opened');
+    onModelCreate(cityContractModel) {
+      apiService
+      .create(cityContractModel)
+      .then(() => this.openPage(this.pagination.currentPage))
+      .catch((err) => {
+        this.errors.push(err);
+        this.$refs.snackbar.open();
+      });
     },
-    onClose(clos) {
-      console.log('Closed', clos);
+    onModelUpdate(cityContractModel) {
+      apiService
+      .update(cityContractModel)
+      .then(() => this.openPage(this.pagination.currentPage))
+      .catch((err) => {
+        this.errors.push(err);
+        this.$refs.snackbar.open();
+      });
     },
-    closeDialog(ref) {
-      this.$refs[ref].close();
+    openCreateDialog(ref) {
+      this.dialogCityContract = {
+        price: null,
+        status: null,
+        start_date: null,
+        end_date: null,
+        city: null,
+        color: null,
+      };
+      this.openDialog(ref);
     },
     openDialog(ref) {
       this.$refs[ref].open();
     },
+    deleteCityContract(id) {
+      apiService.delete(id)
+      .then(() => {
+        this.openPage(this.pagination.currentPage);
+      })
+      .catch((err) => {
+        this.errors.push(err);
+        this.$refs.snackbar.open();
+      });
+    },
+    editCityContract(cityContract) {
+      const updateCityContract = {
+        id: cityContract.id,
+        price: cityContract.price,
+        status: cityContract.status,
+        start_date: new Date(cityContract.start_date),
+        end_date: new Date(cityContract.end_date),
+        city: cityContract.city,
+        color: cityContract.color,
+      };
+      this.dialogCityContract = updateCityContract;
+
+      this.openDialog('cityContractDialog');
+    },
     openPage(page) {
-      axios.get(`http://192.168.99.100:3000/city_contracts/${page}`)
-      .then((response) => {
-        this.cityContracts = response.data.docs;
+      apiService.getPage(page)
+      .then(({ cityContracts, response }) => {
+        this.cityContracts = cityContracts;
         this.pagination = {
           currentPage: page,
           pages: response.data.pages,
@@ -116,6 +165,7 @@ export default {
       })
       .catch((err) => {
         this.errors.push(err);
+        this.$refs.snackbar.open();
       });
     },
   },
@@ -128,7 +178,14 @@ export default {
         }
       } else {
         const currPage = this.pagination.currentPage;
-        if (currPage >= 4) {
+        if (currPage >= this.pagination.pages - 1) {
+          pagesArray = [1, 2,
+            '...',
+            this.pagination.pages - 2,
+            this.pagination.pages - 1,
+            this.pagination.pages,
+          ];
+        } else if (currPage >= 4) {
           pagesArray = [1, 2, '...',
             currPage - 1, currPage, currPage + 1, '...',
             this.pagination.pages,
