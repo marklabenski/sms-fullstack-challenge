@@ -97,11 +97,23 @@ export default {
     CityContractDialog,
   },
   methods: {
-    onOpen() {
-      // console.log('Opened');
+    onModelCreate(cityContractModel) {
+      apiService
+      .create(cityContractModel)
+      .then(() => this.openPage(this.pagination.currentPage))
+      .catch((err) => {
+        this.errors.push(err);
+        this.$refs.snackbar.open();
+      });
     },
-    onClose(clos) {
-      console.log('Closed', clos);
+    onModelUpdate(cityContractModel) {
+      apiService
+      .update(cityContractModel)
+      .then(() => this.openPage(this.pagination.currentPage))
+      .catch((err) => {
+        this.errors.push(err);
+        this.$refs.snackbar.open();
+      });
     },
     closeDialog(ref) {
       this.$refs[ref].close();
