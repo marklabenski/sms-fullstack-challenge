@@ -32,11 +32,8 @@ const getPage = pageNum =>
       reject(err);
     }));
 
-const create = (cityContract) => {
-  /* eslint-disable */
-  debugger;
-  /* eslint-enable */
-  return new Promise((resolve, reject) =>
+const create = cityContract =>
+  new Promise((resolve, reject) =>
     axios.post(`${apiUrl}/city_contracts/`,
       prepareCityContractData(cityContract))
     .then((response) => {
@@ -45,7 +42,7 @@ const create = (cityContract) => {
     .catch((err) => {
       reject(err);
     }));
-};
+
 
 const update = cityContract =>
   new Promise((resolve, reject) => {
