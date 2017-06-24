@@ -59,6 +59,7 @@
         :disabled="key === '...'">{{ key }}</md-button>
     </md-bottom-bar>
     <md-button class="md-fab md-fab-bottom-right" id="fab" @click.native="openDialog('dialog2')">
+    <md-button class="md-fab md-fab-bottom-right" id="fab" @click.native="openCreateDialog('cityContractDialog')" v-if="contentsEditable">
       <md-icon>add</md-icon>
     </md-button>
     <ul v-if="errors && errors.length">
