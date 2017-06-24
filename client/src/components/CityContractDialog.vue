@@ -53,6 +53,11 @@ export default {
   props: ['cityContract', 'dialogRef'],
   components: { MdlDatepicker },
   methods: {
+    emitEvent(eventName) {
+      debugger;
+      this.$emit(eventName, this.cityContract);
+      this.closeDialog();
+    },
     closeDialog() {
       this.dialogRef.close('test');
     },
