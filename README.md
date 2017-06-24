@@ -3,6 +3,9 @@ Fullstack challenge accepted!
 
 ## Prerequisitesa
 
+### Build Prerequisites
+- Docker including `docker-compose`
+
 ### Development Prerequisites
 - Docker including `docker-compose`
 - nodeJS version `v8.1.2`
