@@ -17,7 +17,7 @@ WORKDIR /usr/share/client
 RUN rm -rf /usr/share/nginx/html && \
   ln -s /usr/share/client/dist /usr/share/nginx/html
 
-RUN yarn && yarn run build
+RUN yarn && yarn run build --prod
 
 
 EXPOSE 80
