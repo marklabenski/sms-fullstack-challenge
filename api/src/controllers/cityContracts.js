@@ -4,7 +4,7 @@ const cityContractService = require('../services/cityContractService');
 const router = express.Router();
 
 const list = (req, res) => {
-  cityContractService.list(req.params.page)
+  cityContractService.list(req.params.page, req.query)
   .then(cityContracts => res.status(200).json(cityContracts))
   .catch(err => res.status(400).send(err));
 };

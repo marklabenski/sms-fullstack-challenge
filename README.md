@@ -24,6 +24,9 @@ _Hint_: If you using MacOs or Windows running the docker toolbox you have to use
 To find out which IP that is:
 `$ docker-machine config | grep tcp`
 
+
+On MacOS the default setup is `192.168.99.100` so the web URL would be `http://192.168.99.100:8080`
+
 ## Development
 
 ### Client (VueJS) Development

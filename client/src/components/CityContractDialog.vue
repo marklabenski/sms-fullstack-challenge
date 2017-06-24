@@ -54,7 +54,6 @@ export default {
   components: { MdlDatepicker },
   methods: {
     emitEvent(eventName) {
-      debugger;
       this.$emit(eventName, this.cityContract);
       this.closeDialog();
     },
