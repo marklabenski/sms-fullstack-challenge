@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 const CityContracts = require('../db/models/cityContracts');
 
 const service = {};
@@ -11,15 +13,43 @@ const getLastCityConId = () =>
     });
   });
 
-const list = page =>
-  new Promise((resolve, reject) => {
-    CityContracts.paginate({}, { page, limit: 10 }, (err, cityCons) => {
+const list = (page, filters) => {
+  /* eslint-disable */
+  let query = {};
+  if (filters.start_date && !filters.end_date) {
+    query = {
+      start_date: {
+        '$gte': new Date(
+          moment(filters.start_date).startOf('day').toISOString()),
+        '$lte': new Date(moment(filters.start_date).endOf('day').toISOString()),
+      }
+    };
+  } else if (!filters.start_date && filters.end_date) {
+    query = {
+      end_date: {
+        '$gte': new Date(moment(filters.end_date).startOf('day').toISOString()),
+        '$lte': new Date(moment(filters.end_date).endOf('day').toISOString()),
+      }
+    };
+  } else if (filters.start_date && filters.end_date) {
+    query = {
+      start_date: {
+        '$gte': new Date(filters.start_date),
+      },
+      end_date: {
+        '$lte': new Date(filters.end_date),
+      }
+    };
+  }
+  /* eslint-enable */
+  return new Promise((resolve, reject) => {
+    CityContracts.paginate(query, { page, limit: 10 }, (err, cityCons) => {
       if (err) reject(`${err.name} : ${err.message}`);
       if (cityCons) resolve(cityCons);
       else resolve('no citycons found');
     });
   });
-
+};
 const create = cityConParam =>
   new Promise((resolve, reject) => {
     getLastCityConId()
