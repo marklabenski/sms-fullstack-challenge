@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate');
 
 const Schema = mongoose.Schema;
 // {"id":1,"city":"Neftegorsk",
@@ -7,7 +8,7 @@ const Schema = mongoose.Schema;
 // "color":"#fd4e19"},
 
 const cityContractSchema = new Schema({
-  id: { type: Number },
+  id: { type: Number, unique: true, dropDubs: true },
   city: { type: String, required: true },
   start_date: { type: Date },
   end_date: { type: Date },
@@ -15,6 +16,7 @@ const cityContractSchema = new Schema({
   status: { type: String },
   color: { type: String, match: /#[0-9a-fA-F]{6}/ },
 });
+cityContractSchema.plugin(mongoosePaginate);
 
 cityContractSchema.path('price').set((value) => {
   let returnNumber = 0;

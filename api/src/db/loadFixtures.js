@@ -11,6 +11,7 @@ module.exports = new Promise((resolve) => {
   if (!process.env.LOAD_FIXTURES ||
     !process.env.LOAD_FIXTURES === 'true') {
     resolve();
+    return;
   }
   readFs(`${process.cwd()}/src/db/fixtures/data.json`).then((serJsonData) => {
     const jsonData = JSON.parse(serJsonData);

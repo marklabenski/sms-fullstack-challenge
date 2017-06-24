@@ -14,3 +14,14 @@ api:
   ports:
     - "3000:3000"
   command: node src/server
+client:
+  container_name: nginx
+  build: ./client
+  links:
+    - api
+  environment:
+   - NGINX_HOST=localhost
+   - NGINX_PORT=80
+  working_dir: /usr/share/nginx/html
+  ports:
+    - "8080:80"
