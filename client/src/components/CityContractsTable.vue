@@ -115,8 +115,16 @@ export default {
         this.$refs.snackbar.open();
       });
     },
-    closeDialog(ref) {
-      this.$refs[ref].close();
+    openCreateDialog(ref) {
+      this.dialogCityContract = {
+        price: null,
+        status: null,
+        start_date: null,
+        end_date: null,
+        city: null,
+        color: null,
+      };
+      this.openDialog(ref);
     },
     openDialog(ref) {
       this.$refs[ref].open();
