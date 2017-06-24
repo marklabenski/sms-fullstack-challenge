@@ -40,10 +40,14 @@
         </md-table-row>
 
       </md-table-body>
-      <md-dialog md-open-from="#fab" md-close-to="#fab" ref="dialog2">
-        <city-contract-dialog :dialogRef="this.$refs['dialog2']" :cityContract.sync="dialogCityContract"></city-contract-dialog>
+      <md-dialog md-open-from="#fab" md-close-to="#fab" ref="cityContractDialog" v-if="contentsEditable">
+        <city-contract-dialog
+          v-on:update="onModelUpdate"
+          v-on:create="onModelCreate"
+          :cityContract="dialogCityContract"
+          :dialogRef="this.$refs['cityContractDialog']">
+        </city-contract-dialog>
       </md-dialog>
-
     </md-table>
 
     <md-bottom-bar v-if="pagination && pagination.pages">
