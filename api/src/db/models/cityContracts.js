@@ -2,10 +2,6 @@ const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate');
 
 const Schema = mongoose.Schema;
-// {"id":1,"city":"Neftegorsk",
-// "start_date":"4/13/2013","end_date":"5/18/2013",
-// "price":"55.82","status":"Seldom",
-// "color":"#fd4e19"},
 
 const cityContractSchema = new Schema({
   id: { type: Number, unique: true, dropDubs: true },
@@ -16,8 +12,11 @@ const cityContractSchema = new Schema({
   status: { type: String },
   color: { type: String, match: /#[0-9a-fA-F]{6}/ },
 });
+
+// add paginate plugin
 cityContractSchema.plugin(mongoosePaginate);
 
+// change float values with variable length to fixed length currency strings
 cityContractSchema.path('price').set((value) => {
   let returnNumber = 0;
   if (typeof value === 'number') {

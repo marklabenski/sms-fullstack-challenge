@@ -4,6 +4,7 @@ const CityContracts = require('../db/models/cityContracts');
 
 const service = {};
 
+// get the highest id
 const getLastCityConId = () =>
   new Promise((resolve, reject) => {
     CityContracts.findOne().sort({ id: -1 }).exec((err, cityCon) => {
@@ -16,6 +17,8 @@ const getLastCityConId = () =>
 const list = (page, filters) => {
   /* eslint-disable */
   let query = {};
+
+  // sort by date fields only
   if (filters.start_date && !filters.end_date) {
     query = {
       start_date: {

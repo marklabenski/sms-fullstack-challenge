@@ -13,6 +13,8 @@ module.exports = new Promise((resolve) => {
     resolve();
     return;
   }
+
+  // parse fixture file and process models
   readFs(`${process.cwd()}/src/db/fixtures/data.json`).then((serJsonData) => {
     const jsonData = JSON.parse(serJsonData);
     jsonData.forEach((cityContractData) => {
