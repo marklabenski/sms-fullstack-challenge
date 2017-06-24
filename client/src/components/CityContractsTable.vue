@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import apiService from '@/services/apiService';
 import CityContractDialog from '@/components/CityContractDialog';
 
 export default {
