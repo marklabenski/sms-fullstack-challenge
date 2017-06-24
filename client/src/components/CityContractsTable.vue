@@ -152,7 +152,14 @@ export default {
         }
       } else {
         const currPage = this.pagination.currentPage;
-        if (currPage >= 4) {
+        if (currPage >= this.pagination.pages - 1) {
+          pagesArray = [1, 2,
+            '...',
+            this.pagination.pages - 2,
+            this.pagination.pages - 1,
+            this.pagination.pages,
+          ];
+        } else if (currPage >= 4) {
           pagesArray = [1, 2, '...',
             currPage - 1, currPage, currPage + 1, '...',
             this.pagination.pages,
