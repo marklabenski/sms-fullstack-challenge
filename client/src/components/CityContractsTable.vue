@@ -134,9 +134,9 @@ export default {
       this.openDialog('cityContractDialog');
     },
     openPage(page) {
-      axios.get(`http://192.168.99.100:3000/city_contracts/${page}`)
-      .then((response) => {
-        this.cityContracts = response.data.docs;
+      apiService.getPage(page)
+      .then(({ cityContracts, response }) => {
+        this.cityContracts = cityContracts;
         this.pagination = {
           currentPage: page,
           pages: response.data.pages,
