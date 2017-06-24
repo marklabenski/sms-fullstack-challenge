@@ -7,7 +7,6 @@ import 'vue-material/dist/vue-material.css';
 import App from './App';
 import router from './router';
 
-
 Vue.config.productionTip = false;
 Vue.use(VueMaterial);
 
