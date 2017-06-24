@@ -4,6 +4,7 @@ import axios from 'axios';
 const apiUrl = 'http://api:3000';
 axios.defaults.timeout = 1000;
 
+// prepare data in order to send it to api for updates and creations
 const prepareCityContractData = (cityContract) => {
   const preparedCityContract = {};
   Object.keys(cityContract).forEach((key) => {
